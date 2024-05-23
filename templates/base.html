@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <script src="/assets/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+    {% block body %}{% endblock %}
+    <script>
+        const INTERVAL = 2000;
+
+        // Every INTERVAL, request /status and call the statusCallback
+        var interval;
+        clearInterval(interval);
+        interval = setInterval(function () {
+            $.get('/status', function (data) {
+                const [az, el] = data.split(",").map(parseFloat)
+                statusCallback(az, el)
+            })
+        }, INTERVAL)
+
+        function send(az, el) {
+            // Send the az and el to the server as JSON
+            $.ajax({
+                type: "POST",
+                url: "/point",
+                data: JSON.stringify({ az, el }),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+            } 
+        )
+        }
+    </script>
+
+</html>

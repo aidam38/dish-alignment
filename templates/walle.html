@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<script>
+    function statusCallback(az, el) {
+        console.log(az, el)
+    }
+</script>
+
+<form action="/point" method="post">
+    <input type="text" name="az" placeholder="az">
+    <input type="text" name="el" placeholder="el">
+    <button type="submit">Point</button>
+</form>
+{% endblock %}

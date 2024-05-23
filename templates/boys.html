@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<script>
+    function statusCallback(az, el) {
+        $('#az-value').text(az)
+        $('#el-value').text(el)
+    }
+
+    function onSubmit() {
+        const az = $('#az-input').val()
+        const el = $('#el-input').val()
+        
+        // Send the az and el to the server
+        send(az, el)
+    }
+</script>
+
+<div>
+    <input type="text" name="az" placeholder="az" id="az-input">
+    <input type="text" name="el" placeholder="el" id="el-input">
+    <button type="submit" onclick="onSubmit()">Point</button>
+</div>
+
+<div>
+    az = <span id="az-value">0</span>
+    el = <span id="el-value">0</span>
+</div>
+{% endblock %}
