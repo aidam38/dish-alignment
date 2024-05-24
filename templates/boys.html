@@ -1,29 +1,109 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<style>
+    body {margin: 10px;}
+
+    p {margin: 0;}
+
+    .range-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .range-container > input {
+        margin-left: 10px;
+        width: 500px;
+    }
+
+    .range-container > span {
+        margin-left: 10px;
+    }
+
+    button {
+        margin-bottom: 10px;
+    }
+
+    img {
+        margin: 30px;
+    }
+
+    .greenClass {
+        filter: hue-rotate(120deg);
+    }
+</style>
+
 <script>
-    function statusCallback(az, el) {
+    function statusCallback(az, el, pow, hit_tower_1, hit_tower_2) {
         $('#az-value').text(az)
         $('#el-value').text(el)
+        $('#power').text(pow)
+        if (hit_tower_1 > 0.9){
+            $('#tower1').addClass('greenClass')
+        } else {
+            $('#tower1').removeClass('greenClass')
+        }
+        if (hit_tower_2 > 0.9){
+            $('#tower2').addClass('greenClass')
+        } else {
+            $('#tower2').removeClass('greenClass')
+        }
     }
 
     function onSubmit() {
+        console.log("heyy")
         const az = $('#az-input').val()
         const el = $('#el-input').val()
         
         // Send the az and el to the server
+        $('#btn').prop('disabled', true);
+  
+        // Enable the input after 5 seconds
         send(az, el)
+
+        setTimeout(function() {
+            $('#btn').prop('disabled', false);
+        }, 6000);
     }
+
+    $(document).ready(function() {
+        $('#az-input').on('input', function() {
+            $('#aznum').text($(this).val());
+        });
+
+        $('#el-input').on('input', function() {
+            $('#elnum').text($(this).val());
+        });
+    });
+
 </script>
 
 <div>
-    <input type="text" name="az" placeholder="az" id="az-input">
-    <input type="text" name="el" placeholder="el" id="el-input">
-    <button type="submit" onclick="onSubmit()">Point</button>
+    <div class="range-container">
+        <label for="az-input">Azimuth: </label>
+        <input type="range" min="0" max="360" name="az" id="az-input" value="50">
+        <span id="aznum">50</span>
+    </div>
+    <div class="range-container">
+        <label for="el-input">Elevation: </label>
+        <input type="range" min="15" max="81" name="el" id="el-input" value="50">
+        <span id="elnum">50</span>
+    </div>
+    <button type="submit" onclick="onSubmit()" id="btn">Point</button>
 </div>
 
 <div>
-    az = <span id="az-value">0</span>
-    el = <span id="el-value">0</span>
+    <p>
+        Power = <span id="power">0</span> dBm
+    </p>
+    <p style="display: none;">
+        Azimuth = <span id="az-value">0</span>
+    </p>
+    <p style="display: none;">
+        Elevation = <span id="el-value">0</span>
+    </p>
 </div>
+<img src="/assets/tower.svg" width="200" height="200" id="tower1">
+<img src="/assets/tower.svg" width="200" height="200" id="tower2">
 {% endblock %}

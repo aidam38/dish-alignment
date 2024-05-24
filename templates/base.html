@@ -7,15 +7,15 @@
 <body>
     {% block body %}{% endblock %}
     <script>
-        const INTERVAL = 2000;
+        const INTERVAL = 1000;
 
         // Every INTERVAL, request /status and call the statusCallback
         var interval;
         clearInterval(interval);
         interval = setInterval(function () {
             $.get('/status', function (data) {
-                const [az, el] = data.split(",").map(parseFloat)
-                statusCallback(az, el)
+                const [az, el, pow, hit_tower_1, hit_tower_2] = data.split(",").map(parseFloat)
+                statusCallback(az, el, pow, hit_tower_1, hit_tower_2)
             })
         }, INTERVAL)
 
@@ -27,8 +27,7 @@
                 data: JSON.stringify({ az, el }),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
-            } 
-        )
+            })
         }
     </script>
 
